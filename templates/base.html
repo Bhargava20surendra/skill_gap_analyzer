@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>🔍 Skill Gap Analyzer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #212529;
+            --navbar-bg: #111827;
+        }
+        body,
+p,
+label,
+h1, h2, h3, h4, h5, h6,
+span {
+    color: var(--text-color);
+}
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #e2e8f0;
+            --navbar-bg: #000000;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: var(--navbar-bg) !important;
+            transition: background-color 0.3s ease;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            transition: 0.3s ease;
+        }
+
+        footer {
+            margin-top: auto;
+            background: var(--navbar-bg);
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        /* Toggle Switch */
+        .theme-switch {
+            cursor: pointer;
+            font-size: 18px;
+            margin-right: 15px;
+            user-select: none;
+        }
+
+        .fade-page {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
+    <div class="container">
+        <a class="navbar-brand text-warning fw-bold" href="/">
+            🔍 Skill Gap Analyzer
+        </a>
+
+        <div class="ms-auto d-flex align-items-center">
+
+            <!-- 🌙 Dark Mode Toggle -->
+            <span class="theme-switch text-white" onclick="toggleTheme()" id="themeIcon">
+                🌙
+            </span>
+{% if session.get('loggedin') %}
+    <span class="text-white me-3">
+        👋 {{ session.get('name') }}
+    </span>
+
+    <a href="/dashboard" class="btn btn-outline-light btn-sm me-2">
+        Dashboard
+    </a>
+
+    <!-- ✅ Move Analytics HERE -->
+    <a href="/analytics" class="btn btn-outline-light btn-sm me-2">
+        Analytics
+    </a>
+  <a href="{{ url_for('resume_analyzer') }}" class="btn btn-outline-light btn-sm me-2">
+    Resume Analyzer
+</a>
+    <a href="/logout" class="btn btn-warning btn-sm">
+        Logout
+    </a>
+
+{% else %}
+    <a href="/login" class="btn btn-outline-light btn-sm me-2">
+        Login
+    </a>
+
+    <a href="/register" class="btn btn-warning btn-sm">
+        Register
+    </a>
+{% endif %}
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4 fade-page">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</div>
+
+<footer class="bg-dark text-white text-center py-3 w-100">
+    <div class="container">
+        © 2026 Skill Gap Analyzer • Built with Flask 🚀
+    </div>
+    <div>
+        <a href="/analytics" style="text-decoration: none;" class="text-white me-3">
+            Analytics
+        </a>
+        <a href="{{ url_for('resume_analyzer') }}" style="text-decoration: none;" class="text-white me-3">
+            Resume Analyzer
+        </a>
+    </div>
+</footer>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        const icon = document.getElementById("themeIcon");
+
+        if (html.getAttribute("data-theme") === "dark") {
+            html.setAttribute("data-theme", "light");
+            localStorage.setItem("theme", "light");
+            icon.textContent = "🌙";
+        } else {
+            html.setAttribute("data-theme", "dark");
+            localStorage.setItem("theme", "dark");
+            icon.textContent = "☀️";
+        }
+    }
+
+    // Load saved theme
+    window.onload = function () {
+        const savedTheme = localStorage.getItem("theme") || "light";
+        const html = document.documentElement;
+        const icon = document.getElementById("themeIcon");
+
+        html.setAttribute("data-theme", savedTheme);
+        icon.textContent = savedTheme === "dark" ? "☀️" : "🌙";
+    };
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+
+        <div class="card p-4">
+            <h3 class="text-center mb-4">Welcome Back 👋</h3>
+
+            <form method="POST">
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" 
+                           name="email" 
+                           class="form-control" 
+                           placeholder="Enter your email"
+                           required>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="password" 
+                               name="password" 
+                               id="password"
+                               class="form-control" 
+                               placeholder="Enter your password"
+                               required>
+                        <button type="button" 
+                                class="btn btn-outline-secondary"
+                                onclick="togglePassword()">
+                            👁
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember Me -->
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="remember">
+                    <label class="form-check-label" for="remember">
+                        Remember Me
+                    </label>
+                </div>
+
+                <!-- Login Button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">
+                        Login
+                    </button>
+                </div>
+
+                <!-- Extra Links -->
+                <p class="text-center mt-3 mb-0">
+                    Don't have an account?
+                    <a href="/register">Register here</a>
+                </p>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+function togglePassword() {
+    const password = document.getElementById("password");
+    password.type = password.type === "password" ? "text" : "password";
+}
+</script>
+
+{% endblock %}

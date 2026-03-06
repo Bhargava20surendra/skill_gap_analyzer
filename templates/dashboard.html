@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.skill-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
+}
+
+.skill-card:hover {
+    background-color: #f1f5ff;
+    transform: scale(1.02);
+}
+
+.skill-card input {
+    display: none;
+}
+
+.skill-card.selected {
+    background-color: #dbeafe;
+    border-color: #0d6efd;
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.spinner-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.spinner-overlay.active {
+    display: flex;
+}
+</style>
+
+<div class="row justify-content-center fade-in">
+    <div class="col-lg-10">
+
+        <div class="mb-4">
+            <h3 class="fw-bold">👋 Welcome, {{ session.name }}</h3>
+            <p class="text-muted">
+                Choose your role and skills to analyze your readiness.
+            </p>
+        </div>
+
+        <div class="card p-4">
+
+            <form method="POST" onsubmit="showSpinner()">
+
+                <!-- Role -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">
+                        🎯 Select Your Dream Role
+                    </label>
+                    <select name="role" class="form-select" required>
+                        <option value="" disabled selected>Select a role</option>
+                        {% for role in roles %}
+                        <option value="{{ role.id }}">{{ role.role_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Skill Search + Select All -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="form-label fw-semibold mb-0">
+                        🧠 Select Skills You Already Know
+                    </label>
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="toggleSelectAll()">
+                        Select All
+                    </button>
+                </div>
+
+                <input type="text"
+                       id="skillSearch"
+                       class="form-control mb-3"
+                       placeholder="Search skills..."
+                       onkeyup="filterSkills()">
+
+                <!-- Skill Categories -->
+                <div class="mb-3">
+                    <button type="button" class="btn btn-sm btn-outline-secondary me-2" onclick="filterCategory('all')">All</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary me-2" onclick="filterCategory('frontend')">Frontend</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary me-2" onclick="filterCategory('backend')">Backend</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="filterCategory('ml')">ML</button>
+                </div>
+
+                <!-- Skills Grid -->
+                <div class="row" id="skillsContainer">
+                    {% for skill in skills %}
+                    <div class="col-md-4 col-sm-6 mb-3 skill-item"
+                         data-name="{{ skill.skill_name | lower }}"
+                         data-category="{{ skill.category}}">
+
+                        <label class="skill-card w-100">
+                            <input type="checkbox"
+                                   name="skills"
+                                   value="{{ skill.id }}"
+                                   onchange="toggleCard(this)">
+                            {{ skill.skill_name }}
+                        </label>
+
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Analyze Button -->
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        📊 Analyze Skill Gap
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Spinner -->
+<div class="spinner-overlay" id="spinner">
+    <div class="spinner-border text-light" role="status" style="width:3rem;height:3rem;"></div>
+</div>
+
+<script>
+function toggleCard(checkbox) {
+    const card = checkbox.closest('.skill-card');
+    card.classList.toggle('selected', checkbox.checked);
+}
+
+function toggleSelectAll() {
+    const checkboxes = document.querySelectorAll('input[name="skills"]');
+    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+    checkboxes.forEach(cb => {
+        cb.checked = !allChecked;
+        cb.dispatchEvent(new Event('change'));
+    });
+}
+
+function filterSkills() {
+    const search = document.getElementById('skillSearch').value.toLowerCase();
+    const items = document.querySelectorAll('.skill-item');
+
+    items.forEach(item => {
+        const name = item.getAttribute('data-name');
+        item.style.display = name.includes(search) ? "block" : "none";
+    });
+}
+
+let currentCategory = "all";
+
+function filterSkills() {
+    const search = document.getElementById('skillSearch').value.toLowerCase();
+    const items = document.querySelectorAll('.skill-item');
+
+    items.forEach(item => {
+        const name = item.getAttribute('data-name');
+        const category = item.getAttribute('data-category');
+
+        const matchesSearch = name.includes(search);
+        const matchesCategory = currentCategory === "all" || category === currentCategory;
+
+        item.style.display = (matchesSearch && matchesCategory) ? "block" : "none";
+    });
+}
+
+function filterCategory(category) {
+    currentCategory = category;
+    filterSkills();
+}
+
+function showSpinner() {
+    document.getElementById("spinner").style.display = "flex";
+}
+</script>
+
+{% endblock %}

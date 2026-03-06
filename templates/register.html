@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+
+        <div class="card p-4">
+            <h3 class="text-center mb-4">Create Account 🚀</h3>
+
+            <form method="POST" onsubmit="return validateForm()">
+
+                <!-- Full Name -->
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" 
+                           name="name" 
+                           id="name"
+                           class="form-control" 
+                           placeholder="Enter your full name"
+                           required>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" 
+                           name="email" 
+                           id="email"
+                           class="form-control" 
+                           placeholder="Enter your email"
+                           required>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="password" 
+                               name="password" 
+                               id="password"
+                               class="form-control" 
+                               placeholder="Create password"
+                               required>
+                        <button type="button" 
+                                class="btn btn-outline-secondary" 
+                                onclick="togglePassword()">
+                            👁
+                        </button>
+                    </div>
+                    <small class="text-muted">
+                        Must be at least 6 characters
+                    </small>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="mb-3">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" 
+                           id="confirm_password"
+                           class="form-control" 
+                           placeholder="Re-enter password"
+                           required>
+                </div>
+
+                <div id="error-msg" class="text-danger mb-3"></div>
+
+                <!-- Submit Button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">
+                        Register
+                    </button>
+                </div>
+
+                <!-- Login Link -->
+                <p class="text-center mt-3 mb-0">
+                    Already have an account?
+                    <a href="/login">Login here</a>
+                </p>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+function togglePassword() {
+    const password = document.getElementById("password");
+    password.type = password.type === "password" ? "text" : "password";
+}
+
+function validateForm() {
+    const password = document.getElementById("password").value;
+    const confirm = document.getElementById("confirm_password").value;
+    const errorMsg = document.getElementById("error-msg");
+
+    if (password.length < 6) {
+        errorMsg.innerText = "Password must be at least 6 characters.";
+        return false;
+    }
+
+    if (password !== confirm) {
+        errorMsg.innerText = "Passwords do not match.";
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+{% endblock %}

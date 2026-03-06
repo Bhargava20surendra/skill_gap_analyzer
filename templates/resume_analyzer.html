@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container-fluid">
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+
+       <div class="card p-4 mb-4 shadow-lg">
+    <h3 class="fw-bold mb-3 text-primary">📄 Resume Analyzer</h3>
+
+    <form  method="POST" enctype="multipart/form-data">
+        
+        <div class="mb-3">
+            <label for="resume" class="form-label fw-semibold">Upload your Resume</label>
+            <input type="file" name="resume" id="resume" class="form-control" required>
+        </div>
+
+      <div class="mb-3">
+    <label class="form-label fw-semibold">
+        Paste Job Description <span style="color:red">*</span>
+    </label>
+
+    <textarea 
+        name="jobdesc"
+        class="form-control p-3"
+        rows="8"
+        placeholder="Paste Job Description here..."
+        required></textarea>
+</div>
+        <button class="btn btn-warning px-4 py-2 fw-bold">
+            🔍 Analyze Resume
+        </button>
+
+    </form>
+</div>
+        
+
+     {% if resume_skills %}
+
+<div class="card p-4 shadow-lg">
+    <h4 class="fw-bold text-success mb-3">📊 Resume Analysis Result</h4>
+
+    <p><strong>Resume Skills:</strong> {{ resume_skills | join(', ') }}</p>
+
+    <p><strong>Job Skills:</strong> {{ job_skills | join(', ') }}</p>
+
+    <p><strong>Matched Skills:</strong> {{ matched | join(', ') }}</p>
+
+    <p><strong>Missing Skills:</strong> {{ missing | join(', ') }}</p>
+
+    <h5 class="mt-3">
+        Match Score:
+        <span class="badge bg-success">{{ score }}%</span>
+    </h5>
+</div>
+
+{% endif %}
+</div>   <!-- col-lg-8 -->
+</div>   <!-- row -->
+</div>   <!-- container -->
+{% endblock %}

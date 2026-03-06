@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.score-card {
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    background: linear-gradient(135deg, #4f46e5, #2563eb);
+    color: white;
+}
+
+.skill-box {
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    background: #f8f9fa;
+}
+
+.missing-skill {
+    background: #ffe5e5;
+    color: #c0392b;
+}
+
+.roadmap-step {
+    border-left: 4px solid #0d6efd;
+    padding-left: 15px;
+    margin-bottom: 15px;
+}
+
+.resource-card {
+    border-radius: 12px;
+    padding: 15px;
+    background: #f1f5ff;
+    margin-bottom: 15px;
+}
+</style>
+
+<div class="container">
+
+    <!-- Match Score Section -->
+    <div class="score-card mb-5">
+        <h4>Your Match Score</h4>
+        <h1 class="display-4 fw-bold">{{ match_percentage }}%</h1>
+
+        <div class="progress mt-3" style="height: 20px;">
+            <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                 role="progressbar"
+                 style="width: {{ match_percentage }}%;">
+            </div>
+        </div>
+
+        {% if match_percentage == 100 %}
+        <p class="mt-3 fs-5">🔥 Perfect Match! You are job ready!</p>
+        {% elif match_percentage >= 60 %}
+        <p class="mt-3 fs-5">⚡ You're close! Improve a few skills.</p>
+        {% else %}
+        <p class="mt-3 fs-5">🚀 Keep learning! Skill gaps identified.</p>
+        {% endif %}
+    </div>
+
+
+    <!-- Skills Comparison -->
+    <div class="row mb-5">
+
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h5 class="fw-bold">✅ Required Skills</h5>
+                {% for skill in required_skills %}
+                <div class="skill-box">
+                    {{ skill.skill_name }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h5 class="fw-bold text-danger">❌ Missing Skills</h5>
+                {% if missing_skills %}
+                    {% for skill in missing_skills %}
+                    <div class="skill-box missing-skill">
+                        {{ skill.skill_name }}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-success">No missing skills 🎉</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Roadmap Section -->
+    <div class="card p-4 mb-5">
+        <h5 class="fw-bold mb-4">📚 Learning Roadmap</h5>
+
+        {% for step in roadmap_steps %}
+        <div class="roadmap-step">
+            {{ step.description }}
+        </div>
+        {% endfor %}
+    </div>
+
+
+    <!-- Resources Section -->
+    <div class="card p-4 mb-4">
+        <h5 class="fw-bold mb-4">🔗 Recommended Resources</h5>
+
+        {% for item in resources %}
+        <div class="resource-card">
+            <strong>{{ item.skill }}</strong>
+            <ul class="mt-2">
+                {% for link in item.links %}
+                <li>
+                    <a href="{{ link.resource_link }}" target="_blank">
+                        {{ link.resource_link }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+
+
+    <!-- Back Button -->
+    <div class="text-center">
+        <a href="/dashboard" class="btn btn-outline-primary btn-lg">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

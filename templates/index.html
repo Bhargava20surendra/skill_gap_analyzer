@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<div class="text-center py-5">
+    <h1 class="fw-bold display-5">
+        📊 Analyze Your Skills. <br>
+        <span class="text-primary">Bridge the Gap.</span>
+    </h1>
+
+    <p class="lead mt-3">
+        Discover missing skills, measure your readiness,
+        and get a personalized learning roadmap.
+    </p>
+
+    <div class="mt-4">
+        <a href="/register" class="btn btn-primary btn-lg me-3 px-4">
+            Get Started
+        </a>
+        <a href="/login" class="btn btn-outline-success btn-lg px-4">
+            Login
+        </a>
+    </div>
+</div>
+
+
+<!-- Features Section -->
+<div class="row text-center mt-5">
+
+    <div class="col-md-4 mb-4">
+        <div class="card p-4 h-100">
+            <h4>🔍 Smart Skill Analysis</h4>
+            <p class="mt-3">
+                Compare your current skills with job role requirements
+                and instantly see your match percentage.
+            </p>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card p-4 h-100">
+            <h4>📈 Personalized Roadmap</h4>
+            <p class="mt-3">
+                Get structured learning steps designed
+                to close your skill gaps efficiently.
+            </p>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card p-4 h-100">
+            <h4>📚 Curated Resources</h4>
+            <p class="mt-3">
+                Access recommended courses, tutorials,
+                and resources for every missing skill.
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<!-- Footer CTA -->
+<div class="text-center mt-5 py-4">
+    <h4 class="mb-3">Start improving today 🚀</h4>
+    <a href="/register" class="btn btn-success btn-lg px-5">
+        Create Free Account
+    </a>
+</div>
+
+{% endblock %}
